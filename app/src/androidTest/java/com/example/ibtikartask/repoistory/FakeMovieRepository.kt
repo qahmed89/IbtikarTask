@@ -21,11 +21,9 @@ class FakeMovieRepository : MovieRepository {
     val paging: LiveData<PagingData<Result>> = _paging
     private var shouldReturnNetworkError = false
 
-    fun setShouldReturnNetworkError(value: Boolean) {
-        shouldReturnNetworkError = value
-    }
 
-    override fun popularPeaple(): LiveData<PagingData<Result>> {
+
+    override fun popularPeaple(page :Int): LiveData<PagingData<Result>> {
 
         return paging
     }

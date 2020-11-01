@@ -19,7 +19,7 @@ import javax.inject.Inject
 class DefaultMovieRepository @Inject constructor(
     private val movieAPI: MovieAPI,
 ) : MovieRepository {
-    override fun popularPeaple(): LiveData<PagingData<Result>> {
+    override fun popularPeaple(page :Int): LiveData<PagingData<Result>> {
 
         return Pager(
             config = PagingConfig(
@@ -27,7 +27,7 @@ class DefaultMovieRepository @Inject constructor(
                 maxSize = MAX_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { MoviePagingSource(movieAPI) }
+            pagingSourceFactory = { MoviePagingSource(movieAPI,page) }
         ).liveData
 
     }

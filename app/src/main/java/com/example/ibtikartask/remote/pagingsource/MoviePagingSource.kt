@@ -8,16 +8,16 @@ import java.io.IOException
 
 private const val PEAPLE_STARTING_PAGE_INDEX = 1
 lateinit var repo: PeapleResponse
-
 class MoviePagingSource(
-    private val api: MovieAPI) : PagingSource<Int, com.example.ibtikartask.remote.Model.listpeaple.Result>() {
+    private val api: MovieAPI, var page : Int
+) : PagingSource<Int, com.example.ibtikartask.remote.Model.listpeaple.Result>() {
 
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, com.example.ibtikartask.remote.Model.listpeaple.Result> {
-        val position = params.key ?: PEAPLE_STARTING_PAGE_INDEX
+        val position = params.key ?: page
 
         return try {
-            var response = api.popularPeaple(position)
+            val response = api.popularPeaple(position)
              response.body()?.let {
                 repo = it
             }

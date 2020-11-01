@@ -72,7 +72,7 @@ class PeapleFragment @Inject constructor(val peapleAdapter: PeapleAdapter) : Fra
     private fun subscribeToObserver() {
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModels.pagingPeaple().observe(viewLifecycleOwner) {
+            viewModels.paging.observe(viewLifecycleOwner) {
                 peapleAdapter.submitData(viewLifecycleOwner.lifecycle, it)
 
             }

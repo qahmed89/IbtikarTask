@@ -2,6 +2,7 @@ package com.example.ibtikartask.ui.fragment
 
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.paging.PagingData
@@ -50,9 +51,10 @@ class DetailsFragmentTest {
 
     @Test
     fun clickOnImage_navigateToMovieImageFragment() {
+
         val navController = Mockito.mock(NavController::class.java)
         val imageUrl = "TEST"
-        val testViewModel = MovieViewModel(FakeMovieRepository())
+        val testViewModel= MovieViewModel(FakeMovieRepository(), SavedStateHandle())
         val result = Result(false, 1, 1, listOf(), "", "Ahmed", 0.0, "TEST")
         val args = Bundle().apply {
             putParcelable("result", result)

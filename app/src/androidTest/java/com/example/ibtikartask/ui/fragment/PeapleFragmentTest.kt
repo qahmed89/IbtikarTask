@@ -1,6 +1,9 @@
 package com.example.ibtikartask.ui.fragment
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.hilt.Assisted
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -28,14 +31,14 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import javax.inject.Inject
 
 
 @MediumTest
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
-class PeapleFragmentTest {
-
+class PeapleFragmentTest  {
     private var job: Job? = null
 
     @get:Rule
@@ -59,15 +62,16 @@ class PeapleFragmentTest {
 
     @Test
     fun clickItem_NavigateTODeTailsFragment () {
-        val navController = Mockito.mock(NavController::class.java)
+        val navController = mock(NavController::class.java)
 
 
         val movieApi= PagingData
         val result = listOf(Result(false,1,1, listOf(),"","Ahmed",0.0,"TEST"))
         val paging =  movieApi.from(result)
-        var testViewModel= MovieViewModel(FakeMovieRepository())
+        val testViewModel= MovieViewModel(FakeMovieRepository(), SavedStateHandle())
 
         launchFragmentInHiltContainer<PeapleFragment>(fragmentFactory = fragmentFactory) {
+
             viewModels = testViewModel
 
             Navigation.setViewNavController(requireView(), navController)
@@ -91,8 +95,8 @@ class PeapleFragmentTest {
 
         )
         Mockito.verify(navController).navigate(PeapleFragmentDirections.actionPeapleFragmentToDetailsFragment(result.get(0)))
-        val value =testViewModel.popularPeaple.getOrAwaitValuex().getContentIfNotHandled().let {result->
-            result?.data?.results
+        val value =testViewModel.popularPeaple.getOrAwaitValuex().getContentIfNotHandled().let { it->
+            it?.data?.results
         }
 
         assertThat(value).isEqualTo(result)

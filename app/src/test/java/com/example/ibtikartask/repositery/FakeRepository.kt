@@ -26,7 +26,7 @@ class FakeRepository :MovieRepository  {
         shouldReturnNetworkError = value
     }
 
-    override fun popularPeaple(): LiveData<PagingData<Result>> {
+    override fun popularPeaple(page :Int): LiveData<PagingData<Result>> {
 
         return paging
     }

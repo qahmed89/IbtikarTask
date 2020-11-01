@@ -10,7 +10,7 @@ import com.example.shoppinglisttesting.other.Resource
 interface MovieRepository {
 
 
-    fun popularPeaple(): LiveData<PagingData<Result>>
+    fun popularPeaple(page : Int): LiveData<PagingData<Result>>
     suspend fun testPopularPeaple(): Resource<PeapleResponse>
     suspend fun getPerson(id: Int): Resource<PersonResponse>
 }

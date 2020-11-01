@@ -1,10 +1,8 @@
 package com.example.ibtikartask.ui
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.ibtikartask.remote.Model.listpeaple.PeapleResponse
@@ -16,8 +14,10 @@ import com.example.shoppinglisttesting.repositories.MovieRepository
 import kotlinx.coroutines.launch
 
 class MovieViewModel @ViewModelInject constructor(
-    private val repository: MovieRepository
+    private val repository: MovieRepository,
+    @Assisted state : SavedStateHandle
 ) : ViewModel() {
+    val currentspage = state.getLiveData("page",1)
     private val current = MutableLiveData<PagingData<Result>>()
     var currentSearchResult: LiveData<PagingData<Result>> = current
     private val _person = MutableLiveData<Event<Resource<PersonResponse>>>()
@@ -25,13 +25,19 @@ class MovieViewModel @ViewModelInject constructor(
     private val _popularPeaple = MutableLiveData<Event<Resource<PeapleResponse>>>()
     val popularPeaple: LiveData<Event<Resource<PeapleResponse>>> = _popularPeaple
 
-    fun pagingPeaple(): LiveData<PagingData<Result>> {
-        val newResult: LiveData<PagingData<Result>> = repository.popularPeaple()
-            .cachedIn(viewModelScope)
-        currentSearchResult = newResult
-        return currentSearchResult.cachedIn(viewModelScope)
+
+    val paging = currentspage.switchMap { page->
+        repository.popularPeaple(page).cachedIn(viewModelScope)
 
     }
+
+//    fun pagingPeaple(): LiveData<PagingData<Result>> {
+//        val newResult: LiveData<PagingData<Result>> = repository.popularPeaple()
+//            .cachedIn(viewModelScope)
+//        currentSearchResult = newResult
+//        return currentSearchResult.cachedIn(viewModelScope)
+//
+//    }
 
 
     fun getPersonData(id: Int) {
