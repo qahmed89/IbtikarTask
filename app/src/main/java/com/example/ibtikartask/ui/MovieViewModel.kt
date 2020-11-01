@@ -18,17 +18,18 @@ import kotlinx.coroutines.launch
 class MovieViewModel @ViewModelInject constructor(
     private val repository: MovieRepository
 ) : ViewModel() {
-    private val current =MutableLiveData<PagingData<Result>>()
-     var currentSearchResult:LiveData<PagingData<Result>> =current
+    private val current = MutableLiveData<PagingData<Result>>()
+    var currentSearchResult: LiveData<PagingData<Result>> = current
     private val _person = MutableLiveData<Event<Resource<PersonResponse>>>()
     val person: LiveData<Event<Resource<PersonResponse>>> = _person
     private val _popularPeaple = MutableLiveData<Event<Resource<PeapleResponse>>>()
     val popularPeaple: LiveData<Event<Resource<PeapleResponse>>> = _popularPeaple
+
     fun pagingPeaple(): LiveData<PagingData<Result>> {
         val newResult: LiveData<PagingData<Result>> = repository.popularPeaple()
             .cachedIn(viewModelScope)
         currentSearchResult = newResult
-        return currentSearchResult
+        return currentSearchResult.cachedIn(viewModelScope)
 
     }
 
@@ -43,7 +44,7 @@ class MovieViewModel @ViewModelInject constructor(
     }
 
 
-    fun testPopluarPeaple(){
+    fun testPopluarPeaple() {
 
         _popularPeaple.value = Event(Resource.loading(null))
         viewModelScope.launch {

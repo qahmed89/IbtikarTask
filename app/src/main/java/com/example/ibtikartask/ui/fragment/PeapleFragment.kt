@@ -31,7 +31,7 @@ class PeapleFragment @Inject constructor(val peapleAdapter: PeapleAdapter) : Fra
 
 
         setupRecyclerView()
-        PagingNetwork()
+        subscribeToObserver()
         adapterLoadStateListener()
 
         peapleAdapter.setOnItemClickListener {
@@ -69,7 +69,7 @@ class PeapleFragment @Inject constructor(val peapleAdapter: PeapleAdapter) : Fra
         }
     }
 
-    private fun PagingNetwork() {
+    private fun subscribeToObserver() {
         job?.cancel()
         job = lifecycleScope.launch {
             viewModels.pagingPeaple().observe(viewLifecycleOwner) {
